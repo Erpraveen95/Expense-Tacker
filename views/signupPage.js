@@ -17,7 +17,7 @@ async function onSubmit(e) {
             password: passwordInput.value
         }
         //console.log(userDetails)
-        const res = await axios.post("http://localhost:3000/login", userDetails)
+        const res = await axios.post("http://localhost:3000/signup", userDetails)
         updateDom(res.data.res, "success")
         console.log('details savesuccess', res.data.res)
     } catch (err) {
@@ -27,7 +27,6 @@ async function onSubmit(e) {
     }
 }
 function updateDom(user, string) {
-    msg.innerHTML = ""
     const item = document.createElement('li')
     if (string === "success") {
         item.classList.add("success")
@@ -35,6 +34,9 @@ function updateDom(user, string) {
         item.classList.add("error")
     }
     item.innerHTML = `<li>${user}</li>`
-    item.innerHTML.style =
-        msg.appendChild(item)
+    msg.appendChild(item)
+    setTimeout(() => {
+        msg.innerHTML = ""
+    }, 5000)
 }
+

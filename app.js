@@ -2,7 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
 
-const loginRoutes = require("./routes/loginRoutes")
+const loginRoutes = require("./routes/signUpRoutes")
 
 const app = express()
 const sequelize = require("./models/loginPageModel")

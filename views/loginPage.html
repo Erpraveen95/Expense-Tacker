@@ -4,40 +4,24 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Expense Tracker SignUp</title>
+    <title>Login to Your Account</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
   </head>
   <body>
-    <div>
-      <h1 style="color: crimson">
-        Welcome Login / SignUp to Track Your Expenses
-      </h1>
-    </div>
-    <div id="form-div">
-      <form id="form">
-        <fieldset style="justify-items: center">
-          <label for="name">Enter Name</label>
-          <input type="text" name="nameInput" id="name" /><br />
+    <h1>Existing UserLogin</h1>
+    <div style="align-content: center">
+      <form id="formLogin">
+        <fieldset style="width: fit-content">
           <label for="email">Enter Email</label>
-          <input type="email" id="email" required /><br />
-          <label for="phone">Enter phone</label>
-          <input type="text" name="phoneNumber" id="phone" required /><br />
-          <label for="password">password</label>
-          <input type="password" id="password" required /><br />
-          <button type="submit">Sign Up</button>
+          <input type="text" id="emailLogin" required /><br />
+          <label for="password">Enter Password</label>
+          <input type="password" id="passwordLogin" required /><br />
+          <button type="submit">Login</button>
         </fieldset>
       </form>
-      <a href=""></a>
     </div>
-    <ul id="msg"></ul>
+    <a href="./signUpPage.html">New User? SignUp here</a>
+    <ul id="msg-new"></ul>
   </body>
-  <script src="./signupPage.js"></script>
-  <style>
-    li.error {
-      color: red;
-    }
-    li.success {
-      color: darkslateblue;
-    }
-  </style>
+  <script src="./login.js"></script>
 </html>

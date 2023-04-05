@@ -4,7 +4,7 @@ const router = express.Router()
 
 const login = require("../models/loginPageModel.js")
 
-router.post("/login", async (req, res, next) => {
+router.post("/signup", async (req, res, next) => {
     console.log(req.body, "data from frountend")
     try {
         const name = req.body.name
@@ -22,6 +22,23 @@ router.post("/login", async (req, res, next) => {
     } catch (err) {
         const errorMessage = err.errors[0].message;
         res.status(500).json({ err: errorMessage })
+    }
+})
+router.post('/login', async (req, res, next) => {
+    try {
+        const email = req.body.email
+        const password = req.body.password
+        const emailExists = await login.findOne({ where: { email: email } });
+        const passExists = await login.findOne({ where: { password: password } });
+        if (emailExists && passExists) {
+            res.json({ res: "login success" })
+        } else if (emailExists && !passExists) {
+            res.json({ res: "password is incorrect" })
+        } else {
+            res.json({ res: "invalid credentials" })
+        }
+    } catch (error) {
+        res.status(500).json({ err: error })
     }
 })
 

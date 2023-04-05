@@ -19,12 +19,12 @@ async function onLogin(e) {
         updateDom(response.data.res)
 
     } catch (err) {
-        console.log(err.error[0])
+        console.log(err.response.data.res)
+        updateDom(err.response.data.res)
     }
 }
 
 function updateDom(user) {
-
     const item = document.createElement("li")
     item.textContent = user
     msg.appendChild(item)

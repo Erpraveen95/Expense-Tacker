@@ -31,11 +31,11 @@ router.post('/login', async (req, res, next) => {
         const emailExists = await login.findOne({ where: { email: email } });
         const passExists = await login.findOne({ where: { password: password } });
         if (emailExists && passExists) {
-            res.json({ res: "login success" })
+            res.status(200).json({ res: "login success" })
         } else if (emailExists && !passExists) {
-            res.json({ res: "password is incorrect" })
+            res.status(401).json({ res: "password is incorrect" })
         } else {
-            res.json({ res: "invalid credentials" })
+            res.status(404).json({ res: "invalid credentials" })
         }
     } catch (error) {
         res.status(500).json({ err: error })

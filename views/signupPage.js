@@ -21,9 +21,9 @@ async function onSubmit(e) {
         updateDom(res.data.res, "success")
         console.log('details savesuccess', res.data.res)
     } catch (err) {
-        console.log(err.response.data.err, "this is error")
+        console.log(err.response.data.error.errors[0].message, "this is error")
         // console.log("error resopnse", res)
-        updateDom(err.response.data.err, "error")
+        updateDom(err.response.data.error.errors[0].message, "error")
     }
 }
 function updateDom(user, string) {

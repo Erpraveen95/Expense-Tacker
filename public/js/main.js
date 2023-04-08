@@ -12,8 +12,10 @@ form.addEventListener("submit", onSubmit);
 
 window.addEventListener("DOMContentLoaded", async () => {
     try {
+        const token = localStorage.getItem("token")
         const res = await axios
-            .get("http://localhost:3000/getExpense")
+            .get("http://localhost:3000/getExpense",
+                { headers: { "Autherization": token } })
 
         for (let i = 0; i < res.data.fetchExpense.length; i++) {
             updateDom(res.data.fetchExpense[i]);
@@ -36,9 +38,10 @@ async function onSubmit(e) {
                 category: category.value
             };
             //console.log(userDetails, "this is beign saved")
+            const token = localStorage.getItem("token")
             const user = await axios.post(
                 "http://localhost:3000/addExpense",
-                userDetails
+                userDetails, { headers: { Autherization: token } }
             );
 
             console.log("details saved success");
@@ -82,7 +85,8 @@ function updateDom(user) {
 
 async function deleteUser(id) {
     try {
-        await axios.delete(`http://localhost:3000/delete/${id}`);
+        const token = localStorage.getItem("token")
+        await axios.delete(`http://localhost:3000/delete/${id}`, { headers: { Autherization: token } });
         console.log("data Succesfully deleted");
         removeUserFromScreen(id);
         total();
@@ -100,7 +104,9 @@ async function total() {
         var totalExpense = 0;
         var positive = 0;
         var negative = 0;
-        const res = await axios.get("http://localhost:3000/getExpense");
+        const token = localStorage.getItem("token")
+        const res = await axios.get("http://localhost:3000/getExpense",
+            { headers: { "Autherization": token } });
 
         res.data.fetchExpense.forEach((i) => {
             //console.log(i)

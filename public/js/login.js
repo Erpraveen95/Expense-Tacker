@@ -18,6 +18,7 @@ async function onLogin(e) {
         console.log(response.request.status)
         updateDom(response.data.res)
         if (response.request.status === 200) {
+            localStorage.setItem("token", response.data.token)
             window.location.href = "../../views/html/main.html"
         }
     } catch (err) {

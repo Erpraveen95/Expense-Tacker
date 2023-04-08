@@ -1,7 +1,12 @@
 const login = require("../models/loginPageModel.js")
 const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken")
+
 
 exports.login = async (req, res) => {
+    function generateToken(id, name) {
+        return jwt.sign({ userId: id, name }, "secretkey")
+    }
     try {
         const email = req.body.email
         const password = req.body.password
@@ -11,7 +16,8 @@ exports.login = async (req, res) => {
             bcrypt.compare(password, user.password, (err, result) => {
                 //console.log("this is bcryptresponse", result)
                 if (result === true) {
-                    res.status(200).json({ res: "login success" })
+                    res.status(200).json({ res: "login success", token: generateToken(user.id, user.name) })
+
                     //res.redirect("./views/html/main.html")
                 } else {
                     res.status(401).json({ res: "password is incorrect" })

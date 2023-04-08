@@ -127,3 +127,15 @@ select {
 .btn:hover {
   background-color: red;
 }
+/* username tag*/
+.username {
+  position: absolute;
+  left: 80px;
+  top: 50px;
+  border: 1px solid black;
+}
+div.username span {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 38px;
+}

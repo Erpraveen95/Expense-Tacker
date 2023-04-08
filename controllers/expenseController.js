@@ -2,7 +2,9 @@ const expenseData = require('../models/expenseData')
 
 exports.getExpense = async (req, res) => {
     try {
-        const fetchExpense = await expenseData.findAll()
+        const user = req.user
+        console.log(">>>>>>>>>>>>>>>>>this ", user.id)
+        const fetchExpense = await expenseData.findAll({ where: { logindatumId: user.id } })
         res.status(200).json({ fetchExpense: fetchExpense })
 
     } catch (err) {
@@ -12,10 +14,11 @@ exports.getExpense = async (req, res) => {
 exports.postExpense = async (req, res) => {
     try {
         const { description, amount, category } = req.body
-        const dataFromBack = await expenseData.create({
+        const dataFromBack = await req.user.createExpense({  // magic sequelize operation 
             description,
             amount,
-            category
+            category,
+            //logindatumId: req.user.id
         })
         res.status(201).json({ dataFromBack: dataFromBack })
     } catch (err) {
@@ -27,9 +30,11 @@ exports.postExpense = async (req, res) => {
 exports.deleteExpense = async (req, res) => {
     try {
         const id = req.params.id
-        await expenseData.destroy({ where: { id: id } })
+        const userId = req.user.id
+        console.log(userId)
+        await expenseData.destroy({ where: { id: id, logindatumId: userId } })
         res.status(200).json({ res: "delete success" })
     } catch (err) {
-
+        res.status(500).json({ err: err })
     }
 }

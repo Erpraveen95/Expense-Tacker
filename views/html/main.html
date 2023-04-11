@@ -6,13 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
     <link rel="stylesheet" href="../../public/css/style.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
    
 </head>
 <body>
     <h1>Expense Tracker</h2>
         <div class="username">
-            <span id="username">Welcome </span>
+            <span id="username">Welcome </span><br>
+            <button id="buy-premium">Buy premium</button>
+
         </div>
     <div class="container">
         <h4>Your Balance</h4>
@@ -56,7 +59,6 @@
             <button class="btn btn-primary" type="submit">Add Transaction</button>
         </form>
     </div>
-   
 
 </body>
 <script src="../../public/js/main.js"></script>

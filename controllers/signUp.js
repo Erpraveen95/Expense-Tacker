@@ -1,11 +1,10 @@
-
-const login = require("../models/loginPageModel.js")
-const bcrypt = require('bcrypt')
+const login = require("../models/loginPageModel.js");
+const bcrypt = require("bcrypt");
 
 exports.signUp = async (req, res) => {
     //console.log(req.body, "data from frountend")
 
-    const { name, email, phone, password } = req.body
+    const { name, email, phone, password } = req.body;
     const saltRounds = 10;
     bcrypt.hash(password, saltRounds, async (err, hash) => {
         try {
@@ -13,14 +12,13 @@ exports.signUp = async (req, res) => {
                 name,
                 email,
                 phone,
-                password: hash
-            })
+                password: hash,
+            });
             res.status(201).json({ res: "Create Account Success" });
         } catch (err) {
-            console.log("backend err", err)
+            console.log("backend err", err);
 
-            res.status(400).json({ error: err })
+            res.status(400).json({ error: err });
         }
-
-    })
-}
+    });
+};

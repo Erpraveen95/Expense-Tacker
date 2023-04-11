@@ -4,21 +4,20 @@ const jwt = require("jsonwebtoken")
 
 
 exports.login = async (req, res) => {
-    function generateToken(id, name) {
-        return jwt.sign({ userId: id, name }, "secretkey")
+    function generateToken(id, name, isPremiumUser) {
+        return jwt.sign({ userId: id, name, isPremiumUser }, "secretkey")
     }
     try {
         const email = req.body.email
         const password = req.body.password
         const user = await login.findOne({ where: { email: email } });
         if (user) {
-            //console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", user.password, password)
+            console.log("this is user >>>>>>", user)
             bcrypt.compare(password, user.password, (err, result) => {
                 //console.log("this is bcryptresponse", result)
                 if (result === true) {
-                    res.status(200).json({ res: "login success", token: generateToken(user.id, user.name) })
+                    res.status(200).json({ res: "login success", token: generateToken(user.id, user.name, user.isPremiumUser) })
 
-                    //res.redirect("./views/html/main.html")
                 } else {
                     res.status(401).json({ res: "password is incorrect" })
                 }

@@ -24,6 +24,10 @@ async function onLogin(e) {
     } catch (err) {
         console.log(err.response.data.res)
         updateDom(err.response.data.res)
+        const forgotPasswordLink = document.createElement("a")
+        forgotPasswordLink.href = "./forgotPassword.html";
+        forgotPasswordLink.textContent = "Forgot Password";
+        document.body.appendChild(forgotPasswordLink);
     }
 }
 

@@ -1,4 +1,3 @@
-//const Razorpay = require("razorpay");
 
 const balance = document.getElementById("balance");
 const money_plus = document.getElementById("money-plus");
@@ -9,8 +8,15 @@ const amount = document.getElementById("amount");
 const category = document.getElementById("category")
 const form = document.querySelector("#form");
 const userList = document.getElementById("list");
-const razorpaySubmit = document.getElementById("buy-premium")
 const username = document.getElementById("username")
+const usernameDiv = document.getElementById("div-username")
+
+//premium
+const razorpaySubmit = document.getElementById("buy-premium")
+const leaderboard = document.getElementById("leaderboard")
+const leaderboardUl = document.getElementById("ul-leaderboard")
+
+console.log(usernameDiv)
 
 
 form.addEventListener("submit", onSubmit);
@@ -26,6 +32,11 @@ window.addEventListener("DOMContentLoaded", async () => {
         username.textContent = `Welcome ${res.data.username}`
         if (res.data.isPremiumUser === true) {
             razorpaySubmit.style.display = "none";
+            const obj = document.createElement("span")
+            obj.classList.add("premium")
+            obj.textContent = "Premium User"
+            usernameDiv.appendChild(obj)
+            displayLeaderboard()
         }
         for (let i = 0; i < res.data.fetchExpense.length; i++) {
             updateDom(res.data.fetchExpense[i]);
@@ -157,7 +168,14 @@ async function buyPremium(e) {
                 payment_id: response.razorpay_payment_id,
             }, { headers: { "Autherization": token } })
             console.log(payment, "after success")
+
             alert("you are a premium user now!!")
+            razorpaySubmit.style.display = "none";
+            const obj = document.createElement("span")
+            obj.classList.add("premium")
+            obj.textContent = "Premium User"
+            usernameDiv.appendChild(obj)
+            leaderboard.style.display = "block";
         }
     }
     const rzp1 = new Razorpay(options);
@@ -173,4 +191,24 @@ async function buyPremium(e) {
         alert("Something Went Wrong")
     })
     //console.log(response, "this is buypremium response")
+}
+function displayLeaderboard() {
+    leaderboard.style.display = "block";
+    const inputElement = document.createElement("input")
+    inputElement.type = "button"
+    inputElement.classList.add("leaderboardButton")
+    inputElement.value = "Show Leaderboard"
+    inputElement.onclick = async () => {
+        const token = localStorage.getItem("token")
+        const userLeaderboardArray = await axios.get("http://localhost:3000/premium/showleaderboard",
+            { headers: { Autherization: token } })
+        console.log(userLeaderboardArray.data.leaderboardData)
+        leaderboardUl.innerHTML = ""
+        userLeaderboardArray.data.leaderboardData.forEach(user => {
+            const li = document.createElement("li")
+            li.innerHTML = `${user.name} : ${user.totalExpense || "0"}`
+            leaderboardUl.appendChild(li)
+        })
+    }
+    leaderboard.appendChild(inputElement)
 }

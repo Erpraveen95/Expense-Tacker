@@ -5,7 +5,10 @@ exports.getExpense = async (req, res) => {
         const user = req.user
         console.log(">>>>>>>>>>>>>>>>>this ", user.id)
         const fetchExpense = await expenseData.findAll({ where: { logindatumId: user.id } })
-        res.status(200).json({ fetchExpense: fetchExpense, username: user.name, isPremiumUser: user.isPremiumUser })
+        res.status(200).json({
+            fetchExpense: fetchExpense, username: user.name,
+            isPremiumUser: user.isPremiumUser
+        })
 
     } catch (err) {
         res.status(500).json({ err: err })

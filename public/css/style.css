@@ -128,14 +128,92 @@ select {
   background-color: red;
 }
 /* username tag*/
-.username {
+.div-username {
   position: absolute;
   left: 80px;
   top: 50px;
 }
 
-div.username span {
+.div-username span {
   font-weight: bold;
   font-style: italic;
   font-size: 38px;
+}
+.div-username span.premium {
+  font-weight: bold;
+  font-style: italic;
+  color: #c0392b;
+  font-size: 15px;
+  animation: flame 2s infinite;
+}
+
+#leaderboard {
+  position: absolute;
+  display: none; /* hide the div by default */
+  text-align: left; /* align the contents to the left */
+  left: 80px;
+  top: 150px;
+}
+
+#ul-leaderboard {
+  list-style: none; /* remove bullet points from the list */
+  padding: 0; /* remove default padding */
+  font-weight: bold;
+}
+
+#ul-leaderboard li {
+  margin-bottom: 10px; /* add some spacing between each list item */
+  border-bottom: 1px solid #36d6ee; /* add a horizontal line between each item */
+  padding-bottom: 5px; /* add some padding at the bottom of each item */
+}
+#ul-leaderboard li .name {
+  margin-right: 10px;
+  color: rgb(242, 50, 25);
+}
+
+#ul-leaderboard li .expense {
+  color: #1eed5f;
+}
+#ul-leaderboard li:last-child {
+  border-bottom: none; /* remove the horizontal line from the last item */
+}
+#ul-leaderboard li:first-child {
+  color: #d4cc30; /* remove the horizontal line from the last item */
+  animation: flame 2s infinite;
+}
+.leaderboardButton {
+  background-color: #1c8adb;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboardButton:hover {
+  background-color: #1566b3;
+}
+@keyframes flame {
+  0% {
+    color: #ffd700; /* golden yellow */
+    text-shadow: 0 0 10px #ffd700;
+  }
+  25% {
+    color: #ff8c00; /* dark orange */
+    text-shadow: 0 0 20px #ff8c00;
+  }
+  50% {
+    color: #ff4500; /* orange red */
+    text-shadow: 0 0 30px #ff4500;
+  }
+  75% {
+    color: #ff6347; /* tomato */
+    text-shadow: 0 0 40px #ff6347;
+  }
+  100% {
+    color: #ff0000; /* red */
+    text-shadow: 0 0 50px #ff0000;
+  }
 }

@@ -66,7 +66,7 @@ async function onSubmit(e) {
             );
 
             console.log("details saved success");
-            updateDom(user.data.dataFromBack);
+            updateDom(user.data.dataFromBack[0]);
 
             text.value = "";
             amount.value = "";
@@ -175,7 +175,7 @@ async function buyPremium(e) {
             obj.classList.add("premium")
             obj.textContent = "Premium User"
             usernameDiv.appendChild(obj)
-            leaderboard.style.display = "block";
+            displayLeaderboard();
         }
     }
     const rzp1 = new Razorpay(options);

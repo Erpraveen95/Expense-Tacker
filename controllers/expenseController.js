@@ -1,4 +1,5 @@
 const expenseData = require('../models/expenseData')
+const User = require('../models/loginPageModel')
 
 exports.getExpense = async (req, res) => {
     try {
@@ -17,13 +18,20 @@ exports.getExpense = async (req, res) => {
 exports.postExpense = async (req, res) => {
     try {
         const { description, amount, category } = req.body
-        const dataFromBack = await req.user.createExpense({  // magic sequelize operation 
+        const dataFromBack = req.user.createExpense({  // magic sequelize operation 
             description,
             amount,
             category,
             //logindatumId: req.user.id
         })
-        res.status(201).json({ dataFromBack: dataFromBack })
+        const totalExpense = parseInt(req.user.totalExpense) + parseInt(amount)
+        const update = User.update({
+            totalExpense: totalExpense
+        }, {
+            where: { id: req.user.id }
+        })
+        const expense = await Promise.all([dataFromBack, update])
+        res.status(201).json({ dataFromBack: expense })
     } catch (err) {
         console.log(err)
         res.status(500).json({ err: err })

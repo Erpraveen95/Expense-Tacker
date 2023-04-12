@@ -18,7 +18,7 @@ const expenseData = sequelize.define("expense", {
     category: {
         type: Sequelize.STRING,
         allowNull: false
-    }
+    },
 
 })
 module.exports = expenseData

@@ -29,7 +29,12 @@ const loginSchema = sequelize.define("logindata", {
     },
     isPremiumUser: {
         type: Sequelize.BOOLEAN
+    },
+    totalExpense: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
     }
+
 });
 
 module.exports = loginSchema

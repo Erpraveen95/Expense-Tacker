@@ -202,7 +202,7 @@ function displayLeaderboard() {
         const token = localStorage.getItem("token")
         const userLeaderboardArray = await axios.get("http://localhost:3000/premium/showleaderboard",
             { headers: { Autherization: token } })
-        console.log(userLeaderboardArray.data.leaderboardData)
+        console.log(userLeaderboardArray)
         leaderboardUl.innerHTML = ""
         userLeaderboardArray.data.leaderboardData.forEach(user => {
             const li = document.createElement("li")

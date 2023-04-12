@@ -1,30 +1,20 @@
 const User = require("../models/loginPageModel")
 const expenseData = require("../models/expenseData")
+const sequelize = require("../util/database")
 
 exports.showLeaderBoard = async (req, res) => {
     try {
-        const allUser = User.findAll()
-        const allExpense = expenseData.findAll()
-        const response = await Promise.all([allUser, allExpense])
-        const userAggregatedResponse = {}
-        //console.log(response[1], "this is a ll expense")
-        response[1].forEach(expense => {
-            const userId = expense.dataValues.logindatumId
-            const amount = expense.dataValues.amount
-            if (userAggregatedResponse[userId]) {
-                userAggregatedResponse[userId] += amount
-            } else {
-                userAggregatedResponse[userId] = amount
-            }
-        });
-        const leaderboardData = []
-        response[0].forEach(user => {
-            leaderboardData.push({ name: user.name, totalExpense: userAggregatedResponse[user.id] })
+        const leaderboardData = await User.findAll({
+            attributes: ['id', 'name', [sequelize.fn('sum', sequelize.col('expenses.amount')),
+                'totalExpense']],
+            include: [{
+                model: expenseData,
+                attributes: []
+            }],
+            group: ['logindata.id'],
+            order: [[sequelize.col('totalExpense'), 'DESC']]
         })
-        //console.log("leaderboard data", leaderboardData)
-        leaderboardData.sort((a, b) => {
-            return b.totalExpense - a.totalExpense;
-        })
+        console.log(leaderboardData)
         res.status(201).json({ leaderboardData })
 
     } catch (err) {

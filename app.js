@@ -2,22 +2,25 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
 
+const User = require("./models/loginPageModel")
+const expenseData = require("./models/expenseData")
+const Order = require("./models/orders")
+const Forgetpassword = require("./models/forgetPasswords")
+
+
 const sequelize = require("./util/database")
 const loginRoutes = require("./routes/signUpRoutes")
 const forgotPasswordRoute = require("./routes/forgotPasswordRoutes")
 const expenseRoutes = require("./routes/expenseRoutes")
 const purchaseRoutes = require('./routes/purchase')
 const premiumFeatureRoutes = require("./routes/premiumFeatures")
-require('dotenv').config()
 
 const app = express()
-const User = require("./models/loginPageModel")
-const expenseData = require("./models/expenseData")
-const Order = require("./models/orders")
+require('dotenv').config()
 
 app.use(cors())
-
 app.use(bodyParser.json())
+
 app.use(loginRoutes)
 app.use(forgotPasswordRoute)
 app.use(expenseRoutes)
@@ -29,6 +32,9 @@ User.hasMany(expenseData)
 
 User.hasMany(Order)
 Order.belongsTo(User)
+
+User.hasMany(Forgetpassword)
+Forgetpassword.belongsTo(User)
 
 sequelize
     //.sync({ force: true })

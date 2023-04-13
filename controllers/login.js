@@ -12,7 +12,7 @@ exports.login = async (req, res) => {
         const password = req.body.password
         const user = await login.findOne({ where: { email: email } });
         if (user) {
-            console.log("this is user >>>>>>", user)
+            //console.log("this is user >>>>>>", user)
             bcrypt.compare(password, user.password, (err, result) => {
                 //console.log("this is bcryptresponse", result)
                 if (result === true) {

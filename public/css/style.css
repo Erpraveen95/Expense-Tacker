@@ -1,5 +1,6 @@
 :root {
-  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --box-shadow: 0 1px 3px rgba(203, 126, 126, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
 }
 * {
   box-sizing: border-box;
@@ -11,13 +12,14 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-image: url("https://drive.google.com/uc?id=1DD9py7p85IOC0CMhUllsJ-tIfhW5BUVd");
+  /*background-image: url("https://drive.google.com/uc?id=1DD9py7p85IOC0CMhUllsJ-tIfhW5BUVd");*/
+  background-color: rgb(213, 226, 240);
   background-size: cover;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 .container {
-  margin: 30px auto;
+  margin: 20px auto;
   width: 350px;
 }
 h1 {
@@ -27,7 +29,7 @@ h1 {
 h3 {
   border-bottom: 1px solid #bbb;
   padding-bottom: 10px;
-  margin: 40px 0 10px;
+  margin: 20px 0 10px;
 }
 h4 {
   margin: 0;
@@ -39,7 +41,7 @@ h4 {
   padding: 20px;
   display: flex;
   justify-content: center;
-  margin: 20px 0;
+  margin: 15px 0;
 }
 .inc-exp-container > div {
   flex: 1;
@@ -89,6 +91,15 @@ select {
 .delete-btn:focus {
   outline: 0;
 }
+.list-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 850px; /* Width of .container plus margin */
+  padding: 20px;
+  overflow-y: auto;
+}
 .list {
   list-style-type: none;
   padding: 0;
@@ -130,14 +141,15 @@ select {
 /* username tag*/
 .div-username {
   position: absolute;
-  left: 80px;
-  top: 50px;
+  left: 40px;
+  top: 20px;
 }
 
 .div-username span {
   font-weight: bold;
   font-style: italic;
   font-size: 38px;
+  color: rgb(235, 90, 128);
 }
 .div-username span.premium {
   font-weight: bold;
@@ -181,7 +193,8 @@ select {
   color: #d4cc30; /* remove the horizontal line from the last item */
   animation: flame 2s infinite;
 }
-.leaderboardButton {
+.leaderboardButton,
+.table-btn {
   background-color: #1c8adb;
   color: #fff;
   padding: 10px 20px;
@@ -216,4 +229,36 @@ select {
     color: #ff0000; /* red */
     text-shadow: 0 0 50px #ff0000;
   }
+}
+.table-div {
+  position: absolute;
+  text-align: left; /* align the contents to the left */
+  left: 10px;
+  top: 250px;
+}
+.my-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+
+.my-table th,
+.my-table td {
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid #ddd;
+}
+
+.my-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.my-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.my-table tr:hover {
+  background-color: #ddd;
 }

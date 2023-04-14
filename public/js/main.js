@@ -16,8 +16,6 @@ const razorpaySubmit = document.getElementById("buy-premium")
 const leaderboard = document.getElementById("leaderboard")
 const leaderboardUl = document.getElementById("ul-leaderboard")
 
-console.log(usernameDiv)
-
 
 form.addEventListener("submit", onSubmit);
 razorpaySubmit.addEventListener("click", buyPremium)
@@ -28,7 +26,6 @@ window.addEventListener("DOMContentLoaded", async () => {
         const res = await axios
             .get("http://localhost:3000/getExpense",
                 { headers: { "Autherization": token } })
-        console.log("this is res >>>>", res.data)
         username.textContent = `Welcome ${res.data.username}`
         if (res.data.isPremiumUser === true) {
             razorpaySubmit.style.display = "none";
@@ -37,6 +34,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             obj.textContent = "Premium User"
             usernameDiv.appendChild(obj)
             displayLeaderboard()
+            displayTable()
         }
         for (let i = 0; i < res.data.fetchExpense.length; i++) {
             updateDom(res.data.fetchExpense[i]);
@@ -212,3 +210,41 @@ function displayLeaderboard() {
     }
     leaderboard.appendChild(inputElement)
 }
+function displayTable() {
+    document.getElementById("table-div").style.display = "block"
+    const tableForm = document.getElementById("table-form")
+    tableForm.addEventListener("submit", display)
+    async function display(e) {
+        e.preventDefault();
+        const token = localStorage.getItem("token")
+        const getTableData = await axios.get("http://localhost:3000/premium/showtable",
+            { headers: { Autherization: token } })
+        console.log(getTableData.data.res)
+        const table = document.createElement('table');
+        table.classList.add("my-table")
+
+        // create table header row
+        const headerRow = document.createElement('tr');
+        Object.keys(getTableData.data.res[0]).forEach(key => {
+            const headerCell = document.createElement('th');
+            headerCell.textContent = key;
+            headerRow.appendChild(headerCell);
+        });
+        table.appendChild(headerRow);
+
+        // create table body rows
+        getTableData.data.res.forEach(expense => {
+            const row = document.createElement('tr');
+            Object.values(expense).forEach(value => {
+                const cell = document.createElement('td');
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+            table.appendChild(row);
+        });
+
+        document.getElementById("table-div").appendChild(table);
+
+    }
+}
+

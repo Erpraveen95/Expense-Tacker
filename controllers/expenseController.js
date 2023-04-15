@@ -1,11 +1,17 @@
 const expenseData = require('../models/expenseData')
 const User = require('../models/loginPageModel')
+const Expense = require("../models/expenseData")
+const Upload = require("../models/fileUploads")
+
 const sequelize = require('../util/database')
+const AWS = require("aws-sdk")
+require("dotenv").config()
+
 
 exports.getExpense = async (req, res) => {
     try {
         const user = req.user
-        console.log(">>>>>>>>>>>>>>>>>this ", user.id)
+        //console.log(">>>>>>>>>>>>>>>>>this ", user.id)
         const fetchExpense = await expenseData.findAll({ where: { logindatumId: user.id } })
         res.status(200).json({
             fetchExpense: fetchExpense, username: user.name,
@@ -65,4 +71,53 @@ exports.deleteExpense = async (req, res) => {
         await t.rollback()
         res.status(500).json({ err: err })
     }
+}
+
+exports.downloadExpense = async (req, res) => {
+    try {
+        const user = req.user
+        const expenses = await user.getExpenses();
+        //console.log(expenses)
+        const stringifiedExpenses = JSON.stringify(expenses)
+        const filename = `${user.id}Expense/${new Date()}.txt`
+        const file = await uploadToS3(stringifiedExpenses, filename)
+
+        const fileUpload = req.user.createUpload({
+            fileUrl: file,
+            fileName: filename
+        })
+        res.status(201).json({ url: file })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ err: err })
+    }
+}
+
+function uploadToS3(data, filename) {
+
+    const BUCKET_NAME = "expense9876"
+    const IAM_USER_KEY = process.env.IAM_USER_KEY;
+    const IAM_USER_SECRET = process.env.IAM_SECRET_KEY;
+    let s3Bucket = new AWS.S3({
+        accessKeyId: IAM_USER_KEY,
+        secretAccessKey: IAM_USER_SECRET,
+    })
+
+    const params = {
+        Bucket: BUCKET_NAME,
+        Key: filename,
+        Body: data,
+        ACL: 'public-read'
+    }
+    return new Promise((resolve, reject) => {
+        s3Bucket.upload(params, (err, s3response) => {
+            if (err) {
+                console.log(err)
+                reject(err);
+            } else {
+                console.log(s3response)
+                resolve(s3response.Location);
+            }
+        })
+    })
 }

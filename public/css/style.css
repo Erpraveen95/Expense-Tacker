@@ -92,7 +92,7 @@ select {
   outline: 0;
 }
 .list-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
@@ -194,7 +194,8 @@ select {
   animation: flame 2s infinite;
 }
 .leaderboardButton,
-.table-btn {
+.table-btn,
+.download {
   background-color: #1c8adb;
   color: #fff;
   padding: 10px 20px;
@@ -231,14 +232,16 @@ select {
   }
 }
 .table-div {
-  position: absolute;
-  text-align: left; /* align the contents to the left */
-  left: 10px;
-  top: 250px;
+  width: 80vw;
+  margin-top: 20px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
+
 .my-table {
   border-collapse: collapse;
-  width: 100%;
+  width: 80vw;
   font-size: 14px;
 }
 
@@ -261,4 +264,10 @@ select {
 
 .my-table tr:hover {
   background-color: #ddd;
+}
+.download {
+  position: absolute;
+  text-align: left; /* align the contents to the left */
+  left: 10px;
+  top: 300px;
 }

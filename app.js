@@ -6,6 +6,7 @@ const User = require("./models/loginPageModel")
 const expenseData = require("./models/expenseData")
 const Order = require("./models/orders")
 const Forgetpassword = require("./models/forgetPasswords")
+const Uploads = require("./models/fileUploads")
 
 
 const sequelize = require("./util/database")
@@ -35,6 +36,9 @@ Order.belongsTo(User)
 
 User.hasMany(Forgetpassword)
 Forgetpassword.belongsTo(User)
+
+User.hasMany(Uploads)
+Uploads.belongsTo(User)
 
 sequelize
     //.sync({ force: true })

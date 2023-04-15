@@ -1,4 +1,3 @@
-
 const balance = document.getElementById("balance");
 const money_plus = document.getElementById("money-plus");
 const money_minus = document.getElementById("money-minus");
@@ -35,6 +34,8 @@ window.addEventListener("DOMContentLoaded", async () => {
             usernameDiv.appendChild(obj)
             displayLeaderboard()
             displayTable()
+            download()
+            showFileHistory()
         }
         for (let i = 0; i < res.data.fetchExpense.length; i++) {
             updateDom(res.data.fetchExpense[i]);
@@ -174,6 +175,9 @@ async function buyPremium(e) {
             obj.textContent = "Premium User"
             usernameDiv.appendChild(obj)
             displayLeaderboard();
+            displayTable();
+            download();
+            showFileHistory()
         }
     }
     const rzp1 = new Razorpay(options);
@@ -248,3 +252,56 @@ function displayTable() {
     }
 }
 
+function download() {
+    const button = document.createElement("button")
+    button.textContent = "download"
+    button.classList.add("download")
+    leaderboard.appendChild(button)
+    button.addEventListener('click', () => {
+        //preventDefault()
+        const token = localStorage.getItem("token")
+        axios.get('http://localhost:3000/user/download', { headers: { Autherization: token } })
+            .then((response) => {
+                console.log(response, "this is download resposne")
+                if (response.status === 201) {
+                    //the bcakend is essentially sending a download link
+                    //  which if we open in browser, the file would download
+
+                    var a = document.createElement("a");
+                    a.href = response.data.url;
+                    a.download = 'myexpense.csv';
+                    a.click();
+                    console.log(response.data.url)
+                    showFileHistory()
+                } else {
+                    throw new Error(response.data.message)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+    })
+}
+
+async function showFileHistory() {
+    try {
+        const token = localStorage.getItem("token")
+        const allFiles = await axios.get("http://localhost:3000/premium/getfilehistory",
+            { headers: { Autherization: token } })
+        console.log(allFiles.data.files)
+        if (allFiles) {
+            document.getElementById("file-history").style.display = "block";
+            allFiles.data.files.forEach(file => {
+                const li = document.createElement("li")
+                li.innerHTML = `<a href=${file.fileUrl}>${file.fileName}</a>`
+                document.getElementById("file-history-ul").appendChild(li)
+            })
+        } else {
+            const item = document.createElement(li)
+            li.textContent = ("no file download history")
+            document.getElementById("file-history-ul").appendChild(item)
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}

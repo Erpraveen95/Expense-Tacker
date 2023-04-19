@@ -1,7 +1,5 @@
 const expenseData = require('../models/expenseData')
 const User = require('../models/loginPageModel')
-const Expense = require("../models/expenseData")
-const Upload = require("../models/fileUploads")
 
 const sequelize = require('../util/database')
 const AWS = require("aws-sdk")
@@ -10,13 +8,38 @@ require("dotenv").config()
 
 exports.getExpense = async (req, res) => {
     try {
+        // const user = req.user
+        // //console.log(">>>>>>>>>>>>>>>>>this ", user.id)
+        // const fetchExpense = await expenseData.findAll({ where: { logindatumId: user.id } })
+        // res.status(200).json({
+        //     fetchExpense: fetchExpense, username: user.name,
+        //     isPremiumUser: user.isPremiumUser
+        // })
+        let itemsPerPage = +req.header("rows") || 2;
+        let currentPage = +req.query.page || 1;
+        let totalItems = await expenseData.count();
+        let lastPage;
+        console.log(itemsPerPage, currentPage, "aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         const user = req.user
-        //console.log(">>>>>>>>>>>>>>>>>this ", user.id)
-        const fetchExpense = await expenseData.findAll({ where: { logindatumId: user.id } })
-        res.status(200).json({
-            fetchExpense: fetchExpense, username: user.name,
-            isPremiumUser: user.isPremiumUser
+        let fetchExpense = await expenseData.findAll({
+            where: { logindatumId: user.id }, offset: ((currentPage - 1) * itemsPerPage),
+            limit: itemsPerPage
         })
+
+        console.log(fetchExpense)
+        res.status(200).json({
+            fetchExpense: fetchExpense,
+            username: user.name,
+            isPremiumUser: user.isPremiumUser,
+            totalItems,
+            currentPage: currentPage,
+            hasNextPage: ((currentPage * itemsPerPage) < totalItems),
+            hasPreviousPage: currentPage > 1,
+            nextPage: currentPage + 1,
+            previousPage: currentPage - 1,
+            lastPage: lastPage,
+        });
+
 
     } catch (err) {
         res.status(500).json({ err: err })
@@ -56,7 +79,6 @@ exports.deleteExpense = async (req, res) => {
         console.log(userId)
         const t = await sequelize.transaction()
         const expense = await expenseData.findOne({ where: { id: id, logindatumId: userId }, transaction: t })
-        console.log(expense.amount)
         const totalExpense = parseInt(req.user.totalExpense) - parseInt(expense.amount)
         await User.update({
             totalExpense: totalExpense
@@ -98,6 +120,7 @@ function uploadToS3(data, filename) {
     const BUCKET_NAME = "expense9876"
     const IAM_USER_KEY = process.env.IAM_USER_KEY;
     const IAM_USER_SECRET = process.env.IAM_SECRET_KEY;
+    console.log(IAM_USER_KEY, IAM_USER_SECRET)
     let s3Bucket = new AWS.S3({
         accessKeyId: IAM_USER_KEY,
         secretAccessKey: IAM_USER_SECRET,

@@ -1,13 +1,16 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
+const helmet = require('helmet')
+const morgan = require('morgan')
+const fs = require('fs')
+const path = require("path")
 
 const User = require("./models/loginPageModel")
 const expenseData = require("./models/expenseData")
 const Order = require("./models/orders")
 const Forgetpassword = require("./models/forgetPasswords")
 const Uploads = require("./models/fileUploads")
-
 
 const sequelize = require("./util/database")
 const loginRoutes = require("./routes/signUpRoutes")
@@ -16,7 +19,11 @@ const expenseRoutes = require("./routes/expenseRoutes")
 const purchaseRoutes = require('./routes/purchase')
 const premiumFeatureRoutes = require("./routes/premiumFeatures")
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "accessLog"), { flags: "a" })
+
 const app = express()
+app.use(helmet())
+app.use(morgan('combined', { stream: accessLogStream }))
 require('dotenv').config()
 
 app.use(cors())
@@ -45,8 +52,9 @@ sequelize
     .sync()
     .then(() => {
         console.log("db connect")
-        app.listen(3000, () => {
-            console.log("server started at port 3000")
+
+        app.listen(process.env.PORT || 3000, () => {
+            console.log(`server started at port ${process.env.PORT || 3000}`)
         })
     })
     .catch(err => {

@@ -19,14 +19,11 @@ exports.getExpense = async (req, res) => {
         let currentPage = +req.query.page || 1;
         let totalItems = await expenseData.count();
         let lastPage;
-        console.log(itemsPerPage, currentPage, "aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         const user = req.user
         let fetchExpense = await expenseData.findAll({
             where: { logindatumId: user.id }, offset: ((currentPage - 1) * itemsPerPage),
             limit: itemsPerPage
         })
-
-        console.log(fetchExpense)
         res.status(200).json({
             fetchExpense: fetchExpense,
             username: user.name,
@@ -39,8 +36,6 @@ exports.getExpense = async (req, res) => {
             previousPage: currentPage - 1,
             lastPage: lastPage,
         });
-
-
     } catch (err) {
         res.status(500).json({ err: err })
     }

@@ -5,6 +5,7 @@ const helmet = require('helmet')
 const morgan = require('morgan')
 const fs = require('fs')
 const path = require("path")
+require('dotenv').config()
 
 const User = require("./models/loginPageModel")
 const expenseData = require("./models/expenseData")
@@ -24,7 +25,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, "accessLog"), 
 const app = express()
 app.use(helmet())
 app.use(morgan('combined', { stream: accessLogStream }))
-require('dotenv').config()
+
 
 app.use(cors())
 app.use(bodyParser.json())

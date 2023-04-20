@@ -5,7 +5,19 @@ const sequelize = require('../util/database')
 const AWS = require("aws-sdk")
 require("dotenv").config()
 
-
+exports.getAllExpense = async (req, res) => {
+    try {
+        const user = req.user
+        //console.log(">>>>>>>>>>>>>>>>>this ", user.id)
+        const fetchExpense = await expenseData.findAll({ where: { logindatumId: user.id } })
+        res.status(200).json({
+            fetchExpense: fetchExpense, username: user.name,
+            isPremiumUser: user.isPremiumUser
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
 exports.getExpense = async (req, res) => {
     try {
         // const user = req.user

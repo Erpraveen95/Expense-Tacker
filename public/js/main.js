@@ -179,7 +179,7 @@ async function total() {
         var positive = 0;
         var negative = 0;
         const token = localStorage.getItem("token")
-        const res = await axios.get("http://localhost:3000/getExpense",
+        const res = await axios.get("http://localhost:3000/getAllExpense",
             { headers: { "Autherization": token } });
 
         res.data.fetchExpense.forEach((i) => {

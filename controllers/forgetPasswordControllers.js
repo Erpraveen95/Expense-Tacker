@@ -31,7 +31,7 @@ exports.forgetPassword = async (req, res) => {
                 sender,
                 to: recievers,
                 subject: "Expense Tracker : OTP ",
-                textContent: `<a href="https://13.233.250.3:3000/password/resetpassword/${id}">Reset password</a>`
+                textContent: `<a href="http://13.233.250.3:3000/password/resetpassword/${id}">Reset password</a>`
             })
         }
         res.status(200).json({ res: "link to rest password has been sent to your email.!!" })

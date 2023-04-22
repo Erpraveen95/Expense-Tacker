@@ -11,7 +11,7 @@ async function resetPassword(e) {
         const inputEmail = {
             email: email.value
         }
-        const response = await axios.post("https://13.233.250.3:3000/password/forgotpassword", inputEmail)
+        const response = await axios.post("http://13.233.250.3:3000/password/forgotpassword", inputEmail)
         console.log(response)
     } catch (err) {
         console.log(err)

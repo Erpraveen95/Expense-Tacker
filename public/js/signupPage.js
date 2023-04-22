@@ -17,7 +17,7 @@ async function onSubmit(e) {
             password: passwordInput.value
         }
         //console.log(userDetails)
-        const res = await axios.post("https://13.233.250.3:3000/signup", userDetails)
+        const res = await axios.post("http://13.233.250.3:3000/signup", userDetails)
         updateDom(res.data.res, "success")
         console.log('details savesuccess', res.request.status)
         if (res.request.status === 201) {

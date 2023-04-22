@@ -28,7 +28,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         const token = localStorage.getItem("token")
         const rows = localStorage.getItem("rowsPerPage")
         const res = await axios
-            .get("https://13.233.250.3:3000/getExpense/?page=1",
+            .get("http://13.233.250.3:3000/getExpense/?page=1",
                 { headers: { "Autherization": token, Rows: rows } })
         username.textContent = `Welcome ${res.data.username}`
         if (res.data.isPremiumUser === true) {
@@ -72,7 +72,7 @@ document.querySelector("#pagination").onclick = async (e) => {
         rows = 3;
     }
     let res = await axios.get(
-        `https://13.233.250.3:3000/getExpense/?page=${page}`,
+        `http://13.233.250.3:3000/getExpense/?page=${page}`,
         {
             headers: { "Autherization": token, Rows: rows },
         }
@@ -110,7 +110,7 @@ async function onSubmit(e) {
             //console.log(userDetails, "this is beign saved")
             const token = localStorage.getItem("token")
             const user = await axios.post(
-                "https://13.233.250.3:3000/addExpense",
+                "http://13.233.250.3:3000/addExpense",
                 userDetails, { headers: { Autherization: token } }
             );
 
@@ -160,7 +160,7 @@ function updateDom(user, newEntry) {
 async function deleteUser(id) {
     try {
         const token = localStorage.getItem("token")
-        await axios.delete(`https://13.233.250.3:3000/delete/${id}`, { headers: { Autherization: token } });
+        await axios.delete(`http://13.233.250.3:3000/delete/${id}`, { headers: { Autherization: token } });
         console.log("data Succesfully deleted");
         removeUserFromScreen(id);
         total();
@@ -179,7 +179,7 @@ async function total() {
         var positive = 0;
         var negative = 0;
         const token = localStorage.getItem("token")
-        const res = await axios.get("https://13.233.250.3:3000/getAllExpense",
+        const res = await axios.get("http://13.233.250.3:3000/getAllExpense",
             { headers: { "Autherization": token } });
 
         res.data.fetchExpense.forEach((i) => {
@@ -209,14 +209,14 @@ function editDetails(description, amount, id) {
 async function buyPremium(e) {
     //console.log("button pressed")
     const token = localStorage.getItem("token")
-    const response = await axios.get("https://13.233.250.3:3000/purchase/premiummembership/",
+    const response = await axios.get("http://13.233.250.3:3000/purchase/premiummembership/",
         { headers: { "Autherization": token } })
     console.log(response)
     var options = {
         "key": response.data.key_id,
         "order_id": response.data.order.id,
         "handler": async function (response) {
-            const payment = await axios.post("https://13.233.250.3:3000/purchase/updatetransactionstatus/", {
+            const payment = await axios.post("http://13.233.250.3:3000/purchase/updatetransactionstatus/", {
                 order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
             }, { headers: { "Autherization": token } })
@@ -233,7 +233,7 @@ async function buyPremium(e) {
     rzp1.on("payment.failed", async function (response) {
         const token = localStorage.getItem("token")
         console.log(response)
-        const payment = await axios.post("https://13.233.250.3:3000/purchase/updatetransactionstatus/", {
+        const payment = await axios.post("http://13.233.250.3:3000/purchase/updatetransactionstatus/", {
             order_id: options.order_id,
             payment_id: response.razorpay_payment_id
         }, { headers: { "Autherization": token } })
@@ -249,7 +249,7 @@ function displayLeaderboard() {
     inputElement.value = "Show Leaderboard"
     inputElement.onclick = async () => {
         const token = localStorage.getItem("token")
-        const userLeaderboardArray = await axios.get("https://13.233.250.3:3000/premium/showleaderboard",
+        const userLeaderboardArray = await axios.get("http://13.233.250.3:3000/premium/showleaderboard",
             { headers: { Autherization: token } })
         console.log(userLeaderboardArray)
         leaderboardUl.innerHTML = ""
@@ -270,7 +270,7 @@ function displayTable() {
     async function display(e) {
         e.preventDefault();
         const token = localStorage.getItem("token")
-        const getTableData = await axios.get("https://13.233.250.3:3000/premium/showtable",
+        const getTableData = await axios.get("http://13.233.250.3:3000/premium/showtable",
             { headers: { Autherization: token } })
         console.log(getTableData.data.res)
         const table = document.createElement('table');
@@ -309,7 +309,7 @@ function download() {
     leaderboard.appendChild(button)
     button.addEventListener('click', () => {
         const token = localStorage.getItem("token")
-        axios.get('https://13.233.250.3:3000/user/download', { headers: { Autherization: token } })
+        axios.get('http://13.233.250.3:3000/user/download', { headers: { Autherization: token } })
             .then((response) => {
                 console.log(response, "this is download resposne")
                 if (response.status === 201) {
@@ -333,7 +333,7 @@ function download() {
 async function showFileHistory() {
     try {
         const token = localStorage.getItem("token")
-        const allFiles = await axios.get("https://13.233.250.3:3000/premium/getfilehistory",
+        const allFiles = await axios.get("http://13.233.250.3:3000/premium/getfilehistory",
             { headers: { Autherization: token } })
         if (allFiles) {
             document.getElementById("file-history").style.display = "block";

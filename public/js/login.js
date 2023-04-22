@@ -14,7 +14,7 @@ async function onLogin(e) {
             email: emailLogin.value,
             password: passwordLogin.value
         }
-        const response = await axios.post("http://13.233.250.3:3000/login", loginData)
+        const response = await axios.post("https://13.233.250.3:3000/login", loginData)
         console.log(response.request.status)
         updateDom(response.data.res)
         if (response.request.status === 200) {

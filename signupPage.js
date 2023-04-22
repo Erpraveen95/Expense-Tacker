@@ -16,7 +16,7 @@ async function onSubmit(e) {
             phone: phoneInput.value
         }
         console.log(userDetails)
-        const res = await axios.post("http://localhost:3000/login", userDetails)
+        const res = await axios.post("http://13.233.250.3:3000/login", userDetails)
 
         console.log('details savesuccess', res)
     } catch (err) {

@@ -35,8 +35,9 @@ app.use(forgotPasswordRoute)
 app.use(expenseRoutes)
 app.use(purchaseRoutes)
 app.use(premiumFeatureRoutes)
+
 app.use((req, res) => {
-    res.sendFile(path.join(__dirname, `views/html/${req.url}`))
+    res.sendFile(path.join(__dirname, `views/html/loginPage.html`))
 })
 
 expenseData.belongsTo(User, { constrains: true, onDelete: 'CASCADE' })

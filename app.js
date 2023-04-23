@@ -23,7 +23,6 @@ const premiumFeatureRoutes = require("./routes/premiumFeatures")
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "accessLog"), { flags: "a" })
 
 const app = express()
-app.disable('x-powered-by')
 app.use(helmet())
 app.use(morgan('combined', { stream: accessLogStream }))
 

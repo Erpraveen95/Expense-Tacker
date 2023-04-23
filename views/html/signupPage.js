@@ -22,7 +22,7 @@ async function onSubmit(e) {
         console.log('details savesuccess', res.request.status)
         if (res.request.status === 201) {
             setTimeout(() => {
-                window.location.href = "../../views/html/loginPage.html"
+                window.location.href = "loginPage.html"
             }, 2000)
         }
     } catch (err) {

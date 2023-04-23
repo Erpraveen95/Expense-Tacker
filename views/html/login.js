@@ -15,7 +15,6 @@ async function onLogin(e) {
             password: passwordLogin.value
         }
         const response = await axios.post("http://13.233.250.3:3000/login", loginData)
-        console.log(response.request.status)
         updateDom(response.data.res)
         if (response.request.status === 200) {
             localStorage.setItem("token", response.data.token)

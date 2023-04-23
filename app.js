@@ -1,6 +1,7 @@
 const express = require("express")
 const bodyParser = require("body-parser")
-const morgan = require('morgan')
+//const morgan = require('morgan')
+const cors = require("cors")
 const fs = require('fs')
 const path = require("path")
 require('dotenv').config()
@@ -21,7 +22,8 @@ const premiumFeatureRoutes = require("./routes/premiumFeatures")
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "accessLog"), { flags: "a" })
 
 const app = express()
-app.use(morgan('combined', { stream: accessLogStream }))
+app.use(cors())
+//app.use(morgan('combined', { stream: accessLogStream }))
 
 
 app.use(bodyParser.json())

@@ -51,7 +51,7 @@ User.hasMany(Uploads)
 Uploads.belongsTo(User)
 
 sequelize
-    //.sync({ force: true })
+    //.sync({ force: true })ss
     .sync()
     .then(() => {
         console.log("db connect")

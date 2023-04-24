@@ -19,7 +19,7 @@ const expenseRoutes = require("./routes/expenseRoutes")
 const purchaseRoutes = require('./routes/purchase')
 const premiumFeatureRoutes = require("./routes/premiumFeatures")
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, "accessLog"), { flags: "a" })
+//const accessLogStream = fs.createWriteStream(path.join(__dirname, "accessLog"), { flags: "a" })
 
 const app = express()
 app.use(cors())

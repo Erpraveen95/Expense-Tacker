@@ -28,14 +28,15 @@ window.addEventListener("DOMContentLoaded", async () => {
         const token = localStorage.getItem("token")
         const rows = localStorage.getItem("rowsPerPage")
         const res = await axios
-            .get("http://43.205.149.236:3000/getExpense/?page=1",
-                { headers: { "Autherization": token, Rows: rows } })
+            .get("http://localhost:3000/getExpense/?page=1",
+                { headers: { "Authorization": token, Rows: rows } })
         username.textContent = `Welcome ${res.data.username}`
         if (res.data.isPremiumUser === true) {
             showPremiumUserFeatures()
         }
         showPagination(res.data)
         for (let i = 0; i < res.data.fetchExpense.length; i++) {
+
             updateDom(res.data.fetchExpense[i]);
         }
 
@@ -72,9 +73,9 @@ document.querySelector("#pagination").onclick = async (e) => {
         rows = 3;
     }
     let res = await axios.get(
-        `http://43.205.149.236:3000/getExpense/?page=${page}`,
+        `http://localhost:3000/getExpense/?page=${page}`,
         {
-            headers: { "Autherization": token, Rows: rows },
+            headers: { "Authorization": token, Rows: rows },
         }
     );
     showPagination(res.data);
@@ -96,32 +97,89 @@ function showPremiumUserFeatures() {
     showFileHistory()
 }
 
+// async function onSubmit(e) {
+//     try {
+//         e.preventDefault();
+//         if (amount.value === "" || text.value == "") {
+//             alert("please input field");
+//         } else {
+//             const userDetails = {
+//                 description: text.value,
+//                 amount: amount.value,
+//                 category: category.value
+//             };
+//             //console.log(userDetails, "this is beign saved")
+//             const token = localStorage.getItem("token")
+//             const user = await axios.post(
+//                 "http://localhost:3000/addExpense",
+//                 userDetails, { headers: { Authorization: token } }
+//             );
+
+//             console.log("details saved success");
+//             console.log(user.data.dataFromBack)
+//             updateDom(user.data.dataFromBack, { newEntry: true });
+
+//             text.value = "";
+//             amount.value = "";
+//         }
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
 async function onSubmit(e) {
-    try {
-        e.preventDefault();
-        if (amount.value === "" || text.value == "") {
-            alert("please input field");
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (token) {
+        const id = localStorage.getItem('editId');
+        const userDetails = {
+            description: text.value,
+            amount: amount.value,
+            category: category.value
+        };
+        if (id) {
+            try {
+                const response = await axios.put(
+                    `http://localhost:3000/editExpense/${id}`,
+                    userDetails,
+                    { headers: { 'Authorization': token } }
+                );
+                //console.log(response, "this is edit resposne")
+                localStorage.removeItem('editId');
+                text.value = "";
+                amount.value = "";
+                window.location.reload();
+            } catch (error) {
+                console.log(error);
+            }
         } else {
-            const userDetails = {
-                description: text.value,
-                amount: amount.value,
-                category: category.value
-            };
-            //console.log(userDetails, "this is beign saved")
-            const token = localStorage.getItem("token")
-            const user = await axios.post(
-                "http://43.205.149.236:3000/addExpense",
-                userDetails, { headers: { Autherization: token } }
-            );
+            if (
+                !id &&
+                text.value &&
+                amount.value &&
+                category.value
+            ) {
+                try {
+                    const user = await axios.post(
+                        "http://localhost:3000/addExpense",
+                        userDetails, { headers: { Authorization: token } }
+                    );
 
-            console.log("details saved success");
-            updateDom(user.data.dataFromBack[0], { newEntry: true });
+                    console.log("details saved success");
+                    console.log(user.data.dataFromBack)
+                    updateDom(user.data.dataFromBack, { newEntry: true });
 
-            text.value = "";
-            amount.value = "";
+                    text.value = "";
+                    amount.value = "";
+                } catch (err) {
+                    console.log(err);
+                }
+            } else {
+                alert('Please fill all fields');
+            }
         }
-    } catch (err) {
-        console.log(err);
+    } else {
+        alert('Please login to add expense');
+        window.location.href = 'login.html';
     }
 }
 // update dom
@@ -144,10 +202,10 @@ function updateDom(user, newEntry) {
 
     const item = document.createElement("li");
     item.classList.add(`${user.amount}` < 0 ? "minus" : "plus");
-    item.id = `${user.id}`;
-    item.innerHTML = `${user.description}<span id="${user.id}">₹${user.amount} ${user.category}</span>
-                    <button onclick=deleteUser('${user.id}') class="delete-btn">X</button>
-                    <button onclick=editDetails('${user.description}','${user.amount}','${user.id}')
+    item.id = `${user._id}`;
+    item.innerHTML = `${user.description}<span id="${user._id}">₹${user.amount} ${user.category}</span>
+                    <button onclick=deleteUser('${user._id}') class="delete-btn">X</button>
+                    <button onclick=editDetails('${user._id}')
                     class="delete-btn">Edit</button>`;
     if (newEntry) {
         userList.insertBefore(item, userList.firstChild)
@@ -160,7 +218,7 @@ function updateDom(user, newEntry) {
 async function deleteUser(id) {
     try {
         const token = localStorage.getItem("token")
-        await axios.delete(`http://43.205.149.236:3000/delete/${id}`, { headers: { Autherization: token } });
+        await axios.delete(`http://localhost:3000/delete/${id}`, { headers: { Authorization: token } });
         console.log("data Succesfully deleted");
         removeUserFromScreen(id);
         total();
@@ -179,8 +237,8 @@ async function total() {
         var positive = 0;
         var negative = 0;
         const token = localStorage.getItem("token")
-        const res = await axios.get("http://43.205.149.236:3000/getAllExpense",
-            { headers: { "Autherization": token } });
+        const res = await axios.get("http://localhost:3000/getAllExpense",
+            { headers: { "Authorization": token } });
 
         res.data.fetchExpense.forEach((i) => {
             //console.log(i)
@@ -193,33 +251,43 @@ async function total() {
         });
 
         balance.textContent = `₹${totalExpense}/-`;
-        money_minus.textContent = `₹${negative}`;
-        money_plus.textContent = `₹${positive}`;
+        money_minus.textContent = `₹${negative}/-`;
+        money_plus.textContent = `₹${positive}/-`;
     } catch (err) {
         (err) => console.log(err);
     }
 }
-function editDetails(description, amount, id) {
-    document.getElementById("text").value = description;
-    document.getElementById("amount").value = amount;
-    deleteUser(id);
+async function editDetails(id) {
+    try {
+        localStorage.setItem('editId', id)
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+            `http://localhost:3000/getOneExpense/${id}`,
+            { headers: { 'Authorization': token } }
+        );
+        //console.log(response.data.response)
+        text.value = response.data.response.description;
+        amount.value = response.data.response.amount;
+        category.value = response.data.response.category
+    } catch (err) {
+        console.log(err)
+    }
 }
-///temp
 
 async function buyPremium(e) {
     //console.log("button pressed")
     const token = localStorage.getItem("token")
-    const response = await axios.get("http://43.205.149.236:3000/purchase/premiummembership/",
-        { headers: { "Autherization": token } })
+    const response = await axios.get("http://localhost:3000/purchase/premiummembership/",
+        { headers: { "Authorization": token } })
     console.log(response)
     var options = {
         "key": response.data.key_id,
         "order_id": response.data.order.id,
         "handler": async function (response) {
-            const payment = await axios.post("http://43.205.149.236:3000/purchase/updatetransactionstatus/", {
+            const payment = await axios.post("http://localhost:3000/purchase/updatetransactionstatus/", {
                 order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
-            }, { headers: { "Autherization": token } })
+            }, { headers: { "Authorization": token } })
             console.log(payment, "after success")
 
             alert("you are a premium user now!!")
@@ -233,10 +301,10 @@ async function buyPremium(e) {
     rzp1.on("payment.failed", async function (response) {
         const token = localStorage.getItem("token")
         console.log(response)
-        const payment = await axios.post("http://43.205.149.236:3000/purchase/updatetransactionstatus/", {
+        const payment = await axios.post("http://localhost:3000/purchase/updatetransactionstatus/", {
             order_id: options.order_id,
             payment_id: response.razorpay_payment_id
-        }, { headers: { "Autherization": token } })
+        }, { headers: { "Authorization": token } })
         alert("Something Went Wrong")
     })
     //console.log(response, "this is buypremium response")
@@ -249,8 +317,8 @@ function displayLeaderboard() {
     inputElement.value = "Show Leaderboard"
     inputElement.onclick = async () => {
         const token = localStorage.getItem("token")
-        const userLeaderboardArray = await axios.get("http://43.205.149.236:3000/premium/showleaderboard",
-            { headers: { Autherization: token } })
+        const userLeaderboardArray = await axios.get("http://localhost:3000/premium/showleaderboard",
+            { headers: { Authorization: token } })
         console.log(userLeaderboardArray)
         leaderboardUl.innerHTML = ""
         userLeaderboardArray.data.leaderboardData.forEach(user => {
@@ -270,8 +338,8 @@ function displayTable() {
     async function display(e) {
         e.preventDefault();
         const token = localStorage.getItem("token")
-        const getTableData = await axios.get("http://43.205.149.236:3000/premium/showtable",
-            { headers: { Autherization: token } })
+        const getTableData = await axios.get("http://localhost:3000/premium/showtable",
+            { headers: { Authorization: token } })
         console.log(getTableData.data.res)
         const table = document.createElement('table');
         table.classList.add("my-table")
@@ -309,7 +377,7 @@ function download() {
     leaderboard.appendChild(button)
     button.addEventListener('click', () => {
         const token = localStorage.getItem("token")
-        axios.get('http://43.205.149.236:3000/user/download', { headers: { Autherization: token } })
+        axios.get('http://localhost:3000/user/download', { headers: { Authorization: token } })
             .then((response) => {
                 console.log(response, "this is download resposne")
                 if (response.status === 201) {
@@ -333,8 +401,8 @@ function download() {
 async function showFileHistory() {
     try {
         const token = localStorage.getItem("token")
-        const allFiles = await axios.get("http://43.205.149.236:3000/premium/getfilehistory",
-            { headers: { Autherization: token } })
+        const allFiles = await axios.get("http://localhost:3000/premium/getfilehistory",
+            { headers: { Authorization: token } })
         if (allFiles) {
             document.getElementById("file-history").style.display = "block";
             allFiles.data.files.forEach(file => {

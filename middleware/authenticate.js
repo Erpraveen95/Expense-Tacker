@@ -1,22 +1,18 @@
-const jwt = require('jsonwebtoken')
-const User = require('../models/loginPageModel')
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
 
-exports.authenticate = (req, res, next) => {
+exports.authenticate = async (req, res, next) => {
     try {
-        const token = req.header('Autherization')
-        //console.log(token, "code iscomig to autherization")
-        const user = jwt.verify(token, "secretkey")
-        //console.log(user)
-        User.findByPk(user.userId).
-            then(user => {
-                console.log(user)
-                req.user = user
-                next()
-            })
-            .catch(err => console.log(err))
-
+        const token = req.header("Authorization");
+        const decoded = jwt.verify(token, "secretkey");
+        const user = await User.findById(decoded.userId);
+        console.log(user)
+        if (!user) {
+            return res.status(401).json({ err: "Unauthorized" });
+        }
+        req.user = user;
+        next();
     } catch (err) {
-        //console.log(err)
-        return res.status(401).json({ err: err })
+        return res.status(401).json({ err: "Unauthorized" });
     }
-}
+};

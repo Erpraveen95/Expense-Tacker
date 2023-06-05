@@ -4,24 +4,55 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login to Your Account</title>
+    <title>Login WhatsChat</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+    <link rel="stylesheet" defer href="login.css" />
+    <!-- <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../favicon-16x16.png"
+    />
+    <link rel="manifest" href="../site.webmanifest" /> -->
   </head>
   <body>
-    <h1>Existing UserLogin</h1>
-    <div style="align-content: center">
-      <form id="formLogin">
-        <fieldset style="width: fit-content">
-          <label for="email">Enter Email</label>
-          <input type="text" id="emailLogin" required /><br />
-          <label for="password">Enter Password</label>
-          <input type="password" id="passwordLogin" required /><br />
+    <div class="main">
+      <h1>Login to Your Existing Account</h1>
+      <h3>Track Your Expenses With Us!!</h3>
+    </div>
+    <div class="form-login-container">
+      <form id="login-form">
+        <fieldset>
+          <legend>Login</legend>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" />
+          </div>
+          <div class="form-group">
+            <label for="password">password</label>
+            <input type="password" id="password" />
+          </div>
           <button type="submit">Login</button>
         </fieldset>
       </form>
     </div>
-    <a href="signUpPage.html">New User? SignUp here</a>
-    <ul id="msg-new"></ul>
+    <div id="response">
+      <ul id="msg-new"></ul>
+    </div>
+    <div class="signup">
+      <a href="signUpPage.html">New User? Signup Here..</a>
+    </div>
   </body>
   <script src="login.js"></script>
 </html>

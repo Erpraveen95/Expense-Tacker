@@ -148,7 +148,7 @@ select {
 .div-username span {
   font-weight: bold;
   font-style: italic;
-  font-size: 38px;
+  font-size: 20px;
   color: rgb(235, 90, 128);
 }
 .div-username span.premium {

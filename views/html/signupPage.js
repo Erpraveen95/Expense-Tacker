@@ -17,18 +17,23 @@ async function onSubmit(e) {
             password: passwordInput.value
         }
         //console.log(userDetails)
-        const res = await axios.post("http://43.205.149.236:3000/signup", userDetails)
-        updateDom(res.data.res, "success")
+        const res = await axios.post("http://localhost:3000/signup", userDetails)
+        updateDom(res.data.message, "success")
         console.log('details savesuccess', res.request.status)
         if (res.request.status === 201) {
             setTimeout(() => {
                 window.location.href = "loginPage.html"
             }, 2000)
+            nameInput.value = ""
+            emailInput.value = ""
+            phoneInput.value = ""
+            passwordInput.value = ""
         }
-    } catch (err) {
-        console.log(err.response.data.error.errors[0].message, "this is error")
+    } catch (error) {
+        console.log(error.response.data.message, "this is error")
         // console.log("error resopnse", res)
-        updateDom(err.response.data.error.errors[0].message, "error")
+        updateDom(error.response.data.message, "error")
+        // updateDom(err.response.data.error.errors[0].message, "error")
     }
 }
 function updateDom(user, string) {

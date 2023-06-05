@@ -8,10 +8,15 @@ router.get('/getExpense', userAuthentication.authenticate, expenseControllers.ge
 
 router.get('/getAllExpense', userAuthentication.authenticate, expenseControllers.getAllExpense)
 
+router.get('/getOneExpense/:id', userAuthentication.authenticate, expenseControllers.getOneExpense)
+
+router.put('/editExpense/:id', userAuthentication.authenticate, expenseControllers.putUpdateExpense);
+
 router.post("/addExpense", userAuthentication.authenticate, expenseControllers.postExpense)
 
 router.delete("/delete/:id", userAuthentication.authenticate, expenseControllers.deleteExpense)
 
 router.get("/user/download", userAuthentication.authenticate, expenseControllers.downloadExpense)
+
 
 module.exports = router

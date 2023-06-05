@@ -4,15 +4,15 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 const fs = require('fs')
 const path = require("path")
+const mongoose = require('mongoose')
 require('dotenv').config()
 
-const User = require("./models/loginPageModel")
-const expenseData = require("./models/expenseData")
-const Order = require("./models/orders")
-const Forgetpassword = require("./models/forgetPasswords")
-const Uploads = require("./models/fileUploads")
+// const User = require("./models/loginPageModel")
+// const expenseData = require("./models/expenseData")
+// const Order = require("./models/orders")
+// const Forgetpassword = require("./models/forgetPasswords")
+// const Uploads = require("./models/fileUploads")
 
-const sequelize = require("./util/database")
 const loginRoutes = require("./routes/signUpRoutes")
 const forgotPasswordRoute = require("./routes/forgotPasswordRoutes")
 const expenseRoutes = require("./routes/expenseRoutes")
@@ -34,32 +34,15 @@ app.use(expenseRoutes)
 app.use(purchaseRoutes)
 app.use(premiumFeatureRoutes)
 
-app.use((req, res) => {
-    res.sendFile(path.join(__dirname, `views/html/${req.url}`))
-})
+// app.use((req, res) => {
+//     res.sendFile(path.join(__dirname, `views/html/${req.url}`))
+// })
 
-expenseData.belongsTo(User, { constrains: true, onDelete: 'CASCADE' })
-User.hasMany(expenseData)
 
-User.hasMany(Order)
-Order.belongsTo(User)
-
-User.hasMany(Forgetpassword)
-Forgetpassword.belongsTo(User)
-
-User.hasMany(Uploads)
-Uploads.belongsTo(User)
-
-sequelize
-    //.sync({ force: true })ss
-    .sync()
+mongoose.connect(`mongodb+srv://${process.env.DBUSERNAME}:${process.env.PASSWORD}@cluster0.6ksoj3r.mongodb.net/Expense-Tracker?retryWrites=true&w=majority`)
     .then(() => {
-        console.log("db connect")
-
-        app.listen(process.env.PORT || 3000, () => {
-            console.log(`server started at port ${process.env.PORT || 3000}`)
+        console.log('mongoDb connected!')
+        app.listen(3000, () => {
+            console.log('server started at port 3000')
         })
-    })
-    .catch(err => {
-        console.log(err)
     })

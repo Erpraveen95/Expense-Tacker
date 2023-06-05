@@ -1,40 +1,45 @@
 
-//login  page  logic
-const formLogin = document.getElementById("formLogin")
-const emailLogin = document.getElementById("emailLogin")
-const passwordLogin = document.getElementById("passwordLogin")
+const emailInput = document.getElementById('email')
+const passwordInput = document.getElementById('password')
+const form = document.getElementById('login-form')
 const msg = document.getElementById("msg-new")
+const response = document.getElementById("response")
+const url = "http://localhost:3000"
 
-formLogin.addEventListener("submit", onLogin)
+// const token = localStorage.getItem("token")
+// if (token) {
+//     window.location.href = "../main/main.html"
+// }
+form.addEventListener("submit", login)
 
-async function onLogin(e) {
+async function login(e) {
     try {
-        e.preventDefault()
-        const loginData = {
-            email: emailLogin.value,
-            password: passwordLogin.value
+        e.preventDefault();
+
+        const loginCredentials = {
+            email: emailInput.value,
+            password: passwordInput.value
         }
-        const response = await axios.post("http://43.205.149.236:3000/login", loginData)
-        updateDom(response.data.res)
-        if (response.request.status === 200) {
-            localStorage.setItem("token", response.data.token)
+        const serverResponse = await axios.post(`${url}/login`, loginCredentials)
+        updateDom(serverResponse.data.res)
+        if (serverResponse.request.status === 200) {
+            localStorage.setItem("token", serverResponse.data.token)
+            //setTimeout(() => {
             window.location.href = "main.html"
+            //}, 2000)
         }
-    } catch (err) {
-        console.log(err.response.data.res)
-        updateDom(err.response.data.res)
+    } catch (error) {
+        console.log(error.response.data.res)
         const forgotPasswordLink = document.createElement("a")
         forgotPasswordLink.href = "forgotPassword.html";
         forgotPasswordLink.textContent = "Forgot Password";
-        document.body.appendChild(forgotPasswordLink);
+        response.appendChild(forgotPasswordLink);
+        updateDom(error.response.data.res)
     }
 }
-
 function updateDom(user) {
+    msg.innerHTML = ""
     const item = document.createElement("li")
     item.textContent = user
     msg.appendChild(item)
-    setTimeout(() => {
-        msg.innerHTML = ""
-    }, 5000)
 }

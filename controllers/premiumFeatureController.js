@@ -1,40 +1,38 @@
-const User = require("../models/loginPageModel")
-const expenseData = require("../models/expenseData")
-const sequelize = require("../util/database")
+const User = require("../models/userModel")
 const Uploads = require("../models/fileUploads")
+const Expense = require("../models/expenseData");
 
 exports.showLeaderBoard = async (req, res) => {
     try {
-        const leaderboardData = await User.findAll({
-            order: [["totalExpense", 'DESC']]
-        })
-        console.log(leaderboardData)
-        res.status(201).json({ leaderboardData })
-
+        const leaderboardData = await User.find().sort({ totalExpense: -1 });
+        console.log(leaderboardData);
+        res.status(201).json({ leaderboardData });
     } catch (err) {
-        res.status(500).json({ err: err })
+        res.status(500).json({ err: err });
     }
-}
+};
+
 exports.getTableData = async (req, res) => {
     try {
-        const user = req.user
-        const response = await expenseData.findAll({
-            where: { logindatumId: user.id },
-            attributes: ['createdAt', 'amount', 'description', 'category']
-        })
-        console.log(response)
-        res.status(200).json({ res: response })
+        const user = req.user;
+        const response = await Expense.find({ userId: user._id })
+            .select('createdAt amount description category');
+
+        console.log(response);
+        res.status(200).json({ res: response });
     } catch (err) {
-        console.log(err)
-        res.status(500).json({ err: err })
+        console.log(err);
+        res.status(500).json({ err: err });
     }
-}
+};
+
+
 exports.getFileHistory = async (req, res) => {
     try {
-        const user = req.user
-        const files = await user.getUploads()
-        res.status(200).json({ files: files })
+        const user = req.user;
+        const files = await Uploads.find({ userId: user._id });
+        res.status(200).json({ files: files });
     } catch (err) {
-        res.status(500).json({ err: err })
+        res.status(500).json({ err: err });
     }
-}
+};

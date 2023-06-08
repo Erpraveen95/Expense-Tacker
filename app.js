@@ -32,7 +32,7 @@ app.use((req, res) => {
     let url = req.url
     res.header('Content-Security-Policy', "img-src 'self'");
     if (url == "/") {
-        url = "signupPage.html"
+        url = "signUpPage.html"
     }
     res.sendFile(path.join(__dirname, `views/html/${url}`))
 })

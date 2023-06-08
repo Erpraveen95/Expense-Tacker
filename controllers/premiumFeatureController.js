@@ -5,7 +5,6 @@ const Expense = require("../models/expenseData");
 exports.showLeaderBoard = async (req, res) => {
     try {
         const leaderboardData = await User.find().sort({ totalExpense: -1 });
-        console.log(leaderboardData);
         res.status(201).json({ leaderboardData });
     } catch (err) {
         res.status(500).json({ err: err });
@@ -18,10 +17,8 @@ exports.getTableData = async (req, res) => {
         const response = await Expense.find({ userId: user._id })
             .select('createdAt amount description category');
 
-        console.log(response);
         res.status(200).json({ res: response });
     } catch (err) {
-        console.log(err);
         res.status(500).json({ err: err });
     }
 };

@@ -15,7 +15,6 @@ exports.forgetPassword = async (req, res) => {
     try {
         const { email } = req.body
         const user = await User.findOne({ email: email })
-        console.log(user)
         if (user) {
             const id = uuid.v4()
             await Forgetpassword.create({ _id: id, isActive: true, user: user._id }) // Create ForgetPassword document
@@ -41,40 +40,9 @@ exports.forgetPassword = async (req, res) => {
     }
 }
 
-// exports.forgetPassword = async (req, res) => {
-//     try {
-//         const { email } = req.body
-//         const user = await User.findOne({ where: { email: email } })
-//         console.log(user)
-//         if (user) {
-//             const id = uuid.v4()
-//             await user.createForgetpassword({ id, isActive: true })
-//             const sender = {
-//                 email: "work.erpraveen@gmail.com",
-//                 name: "Expense Traker Team"
-//             }
-//             const recievers = [{
-//                 email: user.email,
-//             }]
-
-//             await tranEmailApi.sendTransacEmail({
-//                 sender,
-//                 to: recievers,
-//                 subject: "Expense Tracker : OTP ",
-//                 textContent: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`
-//             })
-//         }
-//         res.status(200).json({ res: "link to rest password has been sent to your email.!!" })
-//     } catch (err) {
-//         console.log(err)
-//         res.status(500).json({ err: err })
-//     }
-// }
-
 exports.resetPassword = async (req, res) => {
     try {
         const id = req.params.id;
-        console.log(id)
         const forgetPasswordReq = await Forgetpassword.findOne({ _id: id, isActive: true })
         if (forgetPasswordReq) {
             await forgetPasswordReq.updateOne({ isActive: false })
@@ -102,7 +70,6 @@ exports.updatePassword = async (req, res) => {
         const { newpassword } = req.query
         const { resetpasswordid } = req.params
         const resetpasswordrequest = await Forgetpassword.findOne({ _id: resetpasswordid })
-        console.log(resetpasswordrequest.user)
         const user = await User.findOne({ _id: resetpasswordrequest.user })
 
         if (user) {

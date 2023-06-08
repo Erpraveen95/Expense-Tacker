@@ -6,7 +6,6 @@ exports.authenticate = async (req, res, next) => {
         const token = req.header("Authorization");
         const decoded = jwt.verify(token, "secretkey");
         const user = await User.findById(decoded.userId);
-        console.log(user)
         if (!user) {
             return res.status(401).json({ err: "Unauthorized" });
         }

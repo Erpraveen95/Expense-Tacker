@@ -10,6 +10,7 @@ const userList = document.getElementById("list");
 const username = document.getElementById("username")
 const usernameDiv = document.getElementById("div-username")
 const pagination = document.getElementById("pagination")
+const logOut = document.getElementById("logout-btn")
 
 //premium
 const razorpaySubmit = document.getElementById("buy-premium")
@@ -17,7 +18,6 @@ const leaderboard = document.getElementById("leaderboard")
 const leaderboardUl = document.getElementById("ul-leaderboard")
 
 document.getElementById("rows-per-page").onchange = (e) => {
-    // console.log(e.target.value);
     localStorage.setItem("rowsPerPage", e.target.value);
 };
 form.addEventListener("submit", onSubmit);
@@ -64,7 +64,6 @@ function showPagination(response) {
     }
 }
 document.querySelector("#pagination").onclick = async (e) => {
-    // console.log(e.target);
     const page = e.target.innerHTML;
     let token = localStorage.getItem("token");
 
@@ -97,35 +96,6 @@ function showPremiumUserFeatures() {
     showFileHistory()
 }
 
-// async function onSubmit(e) {
-//     try {
-//         e.preventDefault();
-//         if (amount.value === "" || text.value == "") {
-//             alert("please input field");
-//         } else {
-//             const userDetails = {
-//                 description: text.value,
-//                 amount: amount.value,
-//                 category: category.value
-//             };
-//             //console.log(userDetails, "this is beign saved")
-//             const token = localStorage.getItem("token")
-//             const user = await axios.post(
-//                 "http://localhost:3000/addExpense",
-//                 userDetails, { headers: { Authorization: token } }
-//             );
-
-//             console.log("details saved success");
-//             console.log(user.data.dataFromBack)
-//             updateDom(user.data.dataFromBack, { newEntry: true });
-
-//             text.value = "";
-//             amount.value = "";
-//         }
-//     } catch (err) {
-//         console.log(err);
-//     }
-// }
 async function onSubmit(e) {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -143,7 +113,6 @@ async function onSubmit(e) {
                     userDetails,
                     { headers: { 'Authorization': token } }
                 );
-                //console.log(response, "this is edit resposne")
                 localStorage.removeItem('editId');
                 text.value = "";
                 amount.value = "";
@@ -165,7 +134,6 @@ async function onSubmit(e) {
                     );
 
                     console.log("details saved success");
-                    console.log(user.data.dataFromBack)
                     updateDom(user.data.dataFromBack, { newEntry: true });
 
                     text.value = "";
@@ -241,7 +209,6 @@ async function total() {
             { headers: { "Authorization": token } });
 
         res.data.fetchExpense.forEach((i) => {
-            //console.log(i)
             totalExpense += parseInt(i.amount);
             if (i.amount > 0) {
                 positive += parseInt(i.amount);
@@ -265,7 +232,6 @@ async function editDetails(id) {
             `http://localhost:3000/getOneExpense/${id}`,
             { headers: { 'Authorization': token } }
         );
-        //console.log(response.data.response)
         text.value = response.data.response.description;
         amount.value = response.data.response.amount;
         category.value = response.data.response.category
@@ -275,11 +241,9 @@ async function editDetails(id) {
 }
 
 async function buyPremium(e) {
-    //console.log("button pressed")
     const token = localStorage.getItem("token")
     const response = await axios.get("http://localhost:3000/purchase/premiummembership/",
         { headers: { "Authorization": token } })
-    console.log(response)
     var options = {
         "key": response.data.key_id,
         "order_id": response.data.order.id,
@@ -288,7 +252,6 @@ async function buyPremium(e) {
                 order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
             }, { headers: { "Authorization": token } })
-            console.log(payment, "after success")
 
             alert("you are a premium user now!!")
             razorpaySubmit.style.display = "none";
@@ -300,14 +263,12 @@ async function buyPremium(e) {
     e.preventDefault();
     rzp1.on("payment.failed", async function (response) {
         const token = localStorage.getItem("token")
-        console.log(response)
         const payment = await axios.post("http://localhost:3000/purchase/updatetransactionstatus/", {
             order_id: options.order_id,
             payment_id: response.razorpay_payment_id
         }, { headers: { "Authorization": token } })
         alert("Something Went Wrong")
     })
-    //console.log(response, "this is buypremium response")
 }
 function displayLeaderboard() {
     leaderboard.style.display = "block";
@@ -319,7 +280,6 @@ function displayLeaderboard() {
         const token = localStorage.getItem("token")
         const userLeaderboardArray = await axios.get("http://localhost:3000/premium/showleaderboard",
             { headers: { Authorization: token } })
-        console.log(userLeaderboardArray)
         leaderboardUl.innerHTML = ""
         userLeaderboardArray.data.leaderboardData.forEach(user => {
             const li = document.createElement("li")
@@ -340,7 +300,6 @@ function displayTable() {
         const token = localStorage.getItem("token")
         const getTableData = await axios.get("http://localhost:3000/premium/showtable",
             { headers: { Authorization: token } })
-        console.log(getTableData.data.res)
         const table = document.createElement('table');
         table.classList.add("my-table")
 
@@ -379,13 +338,11 @@ function download() {
         const token = localStorage.getItem("token")
         axios.get('http://localhost:3000/user/download', { headers: { Authorization: token } })
             .then((response) => {
-                console.log(response, "this is download resposne")
                 if (response.status === 201) {
                     var a = document.createElement("a");
                     a.href = response.data.url;
                     a.download = 'myexpense.csv';
                     a.click();
-                    console.log(response.data.url)
                     showFileHistory()
                 } else {
                     throw new Error(response.data.message)
@@ -419,3 +376,8 @@ async function showFileHistory() {
         console.log(err)
     }
 }
+//logout 
+logOut.addEventListener("click", () => {
+    localStorage.removeItem("token")
+    window.location.href = "loginPage.html"
+})

@@ -6,10 +6,10 @@ const msg = document.getElementById("msg-new")
 const response = document.getElementById("response")
 const url = "http://localhost:3000"
 
-// const token = localStorage.getItem("token")
-// if (token) {
-//     window.location.href = "../main/main.html"
-// }
+const token = localStorage.getItem("token")
+if (token) {
+    window.location.href = "main.html"
+}
 form.addEventListener("submit", login)
 
 async function login(e) {

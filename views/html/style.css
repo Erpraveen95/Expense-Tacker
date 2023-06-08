@@ -271,3 +271,23 @@ select {
   left: 10px;
   top: 300px;
 }
+#logout {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+#logout-btn {
+  background-color: #c0392b;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#logout-btn:hover {
+  background-color: #a53224;
+}

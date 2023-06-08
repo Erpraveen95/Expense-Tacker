@@ -16,7 +16,7 @@ async function onSubmit(e) {
             phone: phoneInput.value,
             password: passwordInput.value
         }
-        const res = await axios.post("http://localhost:3000/signup", userDetails)
+        const res = await axios.post("https://expensetracker-co-in.onrender.com/signup", userDetails)
         updateDom(res.data.message, "success")
         if (res.request.status === 201) {
             setTimeout(() => {

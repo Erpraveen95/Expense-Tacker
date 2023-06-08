@@ -10,7 +10,7 @@ async function resetPassword(e) {
         const inputEmail = {
             email: email.value
         }
-        const response = await axios.post("http://localhost:3000/password/forgotpassword", inputEmail)
+        const response = await axios.post("https://expensetracker-co-in.onrender.com/password/forgotpassword", inputEmail)
     } catch (err) {
         console.log(err)
     }

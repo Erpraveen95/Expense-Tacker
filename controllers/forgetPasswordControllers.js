@@ -30,7 +30,7 @@ exports.forgetPassword = async (req, res) => {
                 sender,
                 to: recievers,
                 subject: "Expense Tracker : OTP ",
-                textContent: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`
+                textContent: `<a href="https://expensetracker-co-in.onrender.com/password/resetpassword/${id}">Reset password</a>`
             })
         }
         res.status(200).json({ res: "link to reset password has been sent to your email!!" })

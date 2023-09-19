@@ -4,7 +4,7 @@ const passwordInput = document.getElementById('password')
 const form = document.getElementById('login-form')
 const msg = document.getElementById("msg-new")
 const response = document.getElementById("response")
-const url = "https://expensetracker-co-in.onrender.com"
+const url = new URL("https://expensetracker-co-in.onrender.com")
 
 const token = localStorage.getItem("token")
 if (token) {

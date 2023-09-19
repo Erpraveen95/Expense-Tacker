@@ -4,6 +4,7 @@ const phoneInput = document.getElementById('phone')
 const passwordInput = document.getElementById("password")
 const nameInput = document.getElementById('name')
 const msg = document.getElementById('msg')
+const url = new URL('https://expensetracker-co-in.onrender.com')
 
 form.addEventListener("submit", onSubmit)
 
@@ -16,7 +17,7 @@ async function onSubmit(e) {
             phone: phoneInput.value,
             password: passwordInput.value
         }
-        const res = await axios.post("https://expensetracker-co-in.onrender.com/signup", userDetails)
+        const res = await axios.post(`${url}/signup`, userDetails)
         updateDom(res.data.message, "success")
         if (res.request.status === 201) {
             setTimeout(() => {
